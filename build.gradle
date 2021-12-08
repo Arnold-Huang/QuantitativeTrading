@@ -1,0 +1,157 @@
+group 'com.quantitative'
+version '1.0-SNAPSHOT'
+buildscript {
+    ext {
+        dependencyManagementPluginVersion = "1.0.8.RELEASE"
+        springBootVersion = "2.2.2.RELEASE"
+        mybatisSpringVersion = "2.1.1"
+        druidVersion = "1.1.10"
+        mysqlVersion = "5.1.48"
+        jedisVersion = "2.9.3"
+        // Common
+        lombokVersion = "1.18.10"
+        alibabaFastJsonVersion = "1.2.54"
+        commonsCodecVersion = "1.10"
+        commonsLangVersion = "2.6"
+        // Cloud
+        springCloudEurekaVersion = "1.4.7.RELEASE"
+        // Other
+        swaggerVersion = "1.9.1.RELEASE"
+        validatorVersion = "6.0.13.Final"
+        tkMapperBaseVersion = "1.0.1"
+        servletApiVersion = "4.0.1"
+        jjwtVersion = "0.9.1"
+        mybatiesSpringBootTestVersion = "1.3.2"
+        slf4jVersion = "1.7.30"
+        cacheVersion = "1.1.1"
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("io.spring.gradle:dependency-management-plugin:${dependencyManagementPluginVersion}")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+
+}
+
+String springBootJDBC = "org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}"
+String mybatis = "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpringVersion}"
+String mysql = "mysql:mysql-connector-java:${mysqlVersion}"
+String druid = "com.alibaba:druid-spring-boot-starter:${druidVersion}"
+String springBoot = "org.springframework.boot:spring-boot-starter:${springBootVersion}"
+String springBootWeb = "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+String springBootUndertow = "org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}"
+String springBootProcessor = "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+String springBootAOP = "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
+String springBootDevTools = "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+String springBootRedis = "org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}"
+String springBootActuator = "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+String thymeleaf = "org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}"
+String springBootTest = "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+String swagger = "com.spring4all:swagger-spring-boot-starter:${swaggerVersion}"
+String lombok = "org.projectlombok:lombok:${lombokVersion}"
+String alibabaFastJson = "com.alibaba:fastjson:${alibabaFastJsonVersion}"
+String jedis = "redis.clients:jedis:${jedisVersion}"
+String cacheApi = "javax.cache:cache-api:${cacheVersion}"
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: "io.spring.dependency-management"
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/libs-release" }
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+
+    afterEvaluate {
+        def buildTime = new Date()
+        tasks.withType(Jar) {
+            String ClassPathString = ''
+            configurations.runtime.each { ClassPathString += " lib\\" + it.name }
+            manifest {
+                attributes 'Implementation-Title': project.name,
+                        'Implementation-Version': project.version,
+                        'Created-By': "${System.getProperty('java.version')} (${System.getProperty('java.vendor')})",
+                        'Built-With': "gradle-${project.gradle.gradleVersion}, groovy-${GroovySystem.version}",
+                        'Built-By': System.getProperty('user.name'),
+                        'Built-On': "${InetAddress.localHost.hostName}/${InetAddress.localHost.hostAddress}",
+                        'Build-Time': buildTime.format('yyyy/MM/dd HH:mm:ss'),
+                        'Class-Path': ClassPathString
+            }
+        }
+    }
+}
+
+project(':common-base') {
+    dependencies {
+        compile lombok
+        compile cacheApi
+        compile springBoot
+        compile alibabaFastJson
+        compile springBootProcessor
+        compile springBootAOP
+        compile springBootActuator
+        compile jedis
+        compile springBootRedis
+        compile springBootWeb
+        compileOnly lombok
+        annotationProcessor lombok
+    }
+}
+
+project(':common-binance-api') {
+    dependencies {
+        compile project(':common-base')
+        compile springBootDevTools
+        testCompile springBootTest
+    }
+}
+
+project(':quantitative-datamapping') {
+    dependencies {
+        compile project(':common-base')
+        compile springBootJDBC
+        compile mysql
+        compile mybatis
+        compile druid
+        compile springBootDevTools
+        testCompile springBootTest
+    }
+}
+
+project(':quantitative-trading') {
+    apply plugin: 'application'
+    apply plugin: 'org.springframework.boot'
+
+    mainClassName = 'com.quantitative.trading.QuantitativeTradingApplication'
+    dependencies {
+        compile project(':quantitative-datamapping')
+        implementation(springBootWeb) {
+            exclude module: "spring-boot-starter-tomcat"
+        }
+        compile springBootUndertow
+        compile swagger
+        compileOnly lombok
+        annotationProcessor lombok
+
+        compile springBootDevTools
+        testCompile springBootTest
+    }
+    jar {
+        baseName 'quantitative-trading'
+        manifest {
+            attributes 'Main-Class': "com.quantitative.trading.QuantitativeTradingApplication"
+        }
+        from {
+            configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+    }
+}
