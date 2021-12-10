@@ -7,6 +7,7 @@ import com.quantitative.binance.beans.ExchangeRateLimit;
 import com.quantitative.binance.beans.ExchangeSymbol;
 import com.quantitative.binance.beans.Trade;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +17,7 @@ import javax.annotation.Resource;
 
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {BinanceAPIApplication.class})
+@SpringBootTest(classes = {Main.class})
 public class TestMarketApi {
 
     @Resource
@@ -24,8 +25,8 @@ public class TestMarketApi {
 
     @Test
     public void testMarket() {
-        log.info("ping test respose:{}", binanceMarket.ping() == 200 ? "success" : "false");
-        log.info(binanceMarket.time());
+        Assert.assertEquals(200, binanceMarket.ping());
+        Assert.assertNull(Long.valueOf(binanceMarket.time()));
     }
 
     @Test

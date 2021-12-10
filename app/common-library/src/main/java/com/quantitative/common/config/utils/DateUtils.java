@@ -7,16 +7,15 @@ import java.util.Date;
 
 @Service
 public class DateUtils {
-    private static final String DATE_FORMMAT_TO_DAY = "yyyy-MM-dd";
-    private static final String DATE_FORMMAT_TO_HOUR = "yyyy-MM-dd-HH";
+    private static final String DATE_FORMMAT_TO_TIME = "yyyy-MM-dd HH:mm:ss";
 
-    public static String formatDateToHour(long time) {
-        SimpleDateFormat df = new SimpleDateFormat(DATE_FORMMAT_TO_HOUR);
+    public static String formatDateToTime(long time) {
+        SimpleDateFormat df = new SimpleDateFormat(DATE_FORMMAT_TO_TIME);
         return df.format(time);
     }
 
-    public static String formatDateToHour(Date time) {
-        SimpleDateFormat df = new SimpleDateFormat(DATE_FORMMAT_TO_HOUR);
+    public static String formatDateToTime(Date time) {
+        SimpleDateFormat df = new SimpleDateFormat(DATE_FORMMAT_TO_TIME);
         return df.format(time);
     }
 }

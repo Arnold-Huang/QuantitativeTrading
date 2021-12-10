@@ -1,8 +1,14 @@
-def lombokVersion = '1.18.10'
+def lombokVersion = '1.18.22'
 
 project('common-library') {
     dependencies {
-        implementation 'com.alibaba:fastjson:1.2.78'
+
+    }
+}
+
+project('common-cache-library') {
+    dependencies {
+        implementation project(':app:common-library')
     }
 }
 

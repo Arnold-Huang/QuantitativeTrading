@@ -14,7 +14,7 @@ public class ApplicationStartupRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        log.info("server start...");
+        //log.info("server start...");
         binanceMarket.ping();
         binanceMarket.time();
     }

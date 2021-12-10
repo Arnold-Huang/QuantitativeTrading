@@ -1,11 +1,11 @@
-package com.quantitative.trading;
+package com.quantitative.binance;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = "com.quantitative")
-public class QuantitativeTradingApplication {
+public class Main {
     public static void main(String[] args) {
-        SpringApplication.run(QuantitativeTradingApplication.class, args);
+        SpringApplication.run(Main.class, args);
     }
 }

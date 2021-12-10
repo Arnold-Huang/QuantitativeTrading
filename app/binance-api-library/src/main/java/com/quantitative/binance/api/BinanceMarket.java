@@ -16,10 +16,10 @@ import javax.annotation.Resource;
 @Slf4j
 @Component
 public class BinanceMarket {
-    public static String BINANCE_API_PING = "/api/v3/ping";
-    public static String BINANCE_API_TIME = "/api/v3/time";
-    public static String BINANCE_API_EXCHANGEINFO = "/api/v3/exchangeInfo";
-    public static String BINANCE_API_TRADES = "/api/v3/trades";
+    public static final String BINANCE_API_PING = "/api/v3/ping";
+    public static final String BINANCE_API_TIME = "/api/v3/time";
+    public static final String BINANCE_API_EXCHANGEINFO = "/api/v3/exchangeInfo";
+    public static final String BINANCE_API_TRADES = "/api/v3/trades";
     @Resource
     BinanceConfigure binanceConfigure;
     @Resource
@@ -27,11 +27,10 @@ public class BinanceMarket {
 
     public int ping() {
         int code = 404;
-        String ping = null;
         for (String url : binanceConfigure.urls) {
-            ResponseEntity responseEntity = resttemplate.exchange(url + BINANCE_API_PING, HttpMethod.GET, new HttpEntity<String>(null, new HttpHeaders()), String.class);
+            ResponseEntity<String> responseEntity = resttemplate.exchange(url + BINANCE_API_PING, HttpMethod.GET, new HttpEntity<String>(null, new HttpHeaders()), String.class);
             code = responseEntity.getStatusCodeValue();
-            log.info("ping {} status:{}", url, code);
+            //log.info("ping {} status:{}", url, code);
         }
         return code;
     }
@@ -41,7 +40,7 @@ public class BinanceMarket {
         for (String url : binanceConfigure.urls) {
             time = resttemplate.getForObject(url + BINANCE_API_TIME, String.class);
             if (time != null) {
-                log.info("ping {} result:{}", url, time);
+                //log.info("ping {} result:{}", url, time);
                 break;
             }
         }

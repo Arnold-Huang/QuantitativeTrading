@@ -16,10 +16,9 @@ public class RestTemplateConfigure {
 
     @Bean
     RestTemplate newRestTemplate() {
-        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setConnectTimeout(connectionTimeout);// 设置超时
+        var requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(connectionTimeout);
         requestFactory.setReadTimeout(readTimeout);
-        RestTemplate template = new RestTemplate(requestFactory);
-        return template;
+        return new RestTemplate(requestFactory);
     }
 }
