@@ -3,6 +3,7 @@ apply from: file("${rootDir}/gradle/project.gradle")
 def springBootVersion = "2.6.1"
 def mysqlVersion = '8.0.27'
 def lombokVersion = '1.18.22'
+
 subprojects {
     group = "com.quantitative"
     version = '1.0.0'
@@ -16,8 +17,11 @@ subprojects {
             url "https://maven.restlet.com"
         }
     }
+    ext {
+        lib = ['lombok': "org.projectlombok:lombok:${lombokVersion}"
+        ]
+    }
 }
-
 
 configure(subprojects.findAll { it.name.endsWith('-db-migration') }) {
     apply from: file("${rootDir}/gradle/db-migration.gradle")
@@ -28,6 +32,7 @@ configure(subprojects.findAll { it.name.endsWith('-db-migration') }) {
 }
 
 configure(subprojects.findAll { it.name.endsWith('-library') }) {
+
     dependencies {
         implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
         implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
@@ -39,10 +44,11 @@ configure(subprojects.findAll { it.name.endsWith('-library') }) {
         implementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
         implementation 'com.alibaba:fastjson:1.2.78'
 
-        implementation "org.projectlombok:lombok:${lombokVersion}"
-        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+        implementation lib['lombok']
+        annotationProcessor lib['lombok']
+        testAnnotationProcessor lib['lombok']
+        testCompileOnly lib['lombok']
+
         testImplementation 'junit:junit:4.13.2'
     }
 }
