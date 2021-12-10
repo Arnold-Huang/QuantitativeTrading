@@ -1,0 +1,19 @@
+project('common-library') {
+    dependencies {
+        compileOnly lombok
+        annotationProcessor lombok
+    }
+}
+
+project('binance-api-library') {
+    dependencies {
+        implementation project(':app:common-library')
+    }
+}
+
+project('aquantitative-trading-service') {
+    dependencies {
+        implementation project(':app:common-library')
+        implementation project(':app:binance-api-library')
+    }
+}
