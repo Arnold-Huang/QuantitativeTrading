@@ -1,6 +1,4 @@
-rootProject.name = 'QuantitativeTrading'
-
 include 'app:common-library',
         'app:binance-api-library',
-        'app:aquantitative-trading-service',
-        'app:aquantitative-db-migration'
+        'app:quantitative-trading-service',
+        'app:quantitative-db-migration'

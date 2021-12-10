@@ -1,7 +1,8 @@
+def lombokVersion = '1.18.10'
+
 project('common-library') {
     dependencies {
-        compileOnly lombok
-        annotationProcessor lombok
+        implementation 'com.alibaba:fastjson:1.2.78'
     }
 }
 
@@ -11,7 +12,7 @@ project('binance-api-library') {
     }
 }
 
-project('aquantitative-trading-service') {
+project('quantitative-trading-service') {
     dependencies {
         implementation project(':app:common-library')
         implementation project(':app:binance-api-library')
