@@ -3,7 +3,8 @@ package com.quantitative.binance.api;
 import com.quantitative.binance.beans.ExchangeInfo;
 import com.quantitative.binance.beans.Trade;
 import com.quantitative.binance.configure.BinanceConfigure;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -13,9 +14,10 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 
-@Slf4j
 @Component
 public class BinanceMarket {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BinanceMarket.class);
+
     public static final String BINANCE_API_PING = "/api/v3/ping";
     public static final String BINANCE_API_TIME = "/api/v3/time";
     public static final String BINANCE_API_EXCHANGEINFO = "/api/v3/exchangeInfo";
@@ -30,7 +32,7 @@ public class BinanceMarket {
         for (String url : binanceConfigure.urls) {
             ResponseEntity<String> responseEntity = resttemplate.exchange(url + BINANCE_API_PING, HttpMethod.GET, new HttpEntity<String>(null, new HttpHeaders()), String.class);
             code = responseEntity.getStatusCodeValue();
-            //log.info("ping {} status:{}", url, code);
+            LOGGER.info("ping {} status:{}", url, code);
         }
         return code;
     }
@@ -40,7 +42,7 @@ public class BinanceMarket {
         for (String url : binanceConfigure.urls) {
             time = resttemplate.getForObject(url + BINANCE_API_TIME, String.class);
             if (time != null) {
-                //log.info("ping {} result:{}", url, time);
+                LOGGER.info("ping {} result:{}", url, time);
                 break;
             }
         }

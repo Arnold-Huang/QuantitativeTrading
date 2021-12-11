@@ -15,11 +15,6 @@ project('common-cache-library') {
 project('binance-api-library') {
     dependencies {
         implementation project(':app:common-library')
-
-        implementation lib['lombok']
-        annotationProcessor lib['lombok']
-        testAnnotationProcessor lib['lombok']
-        testCompileOnly lib['lombok']
     }
 }
 
