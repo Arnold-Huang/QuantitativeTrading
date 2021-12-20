@@ -18,9 +18,18 @@ project('binance-api-library') {
     }
 }
 
-project('quantitative-trading-service') {
+project('quant-db-mapping') {
     dependencies {
         implementation project(':app:common-library')
         implementation project(':app:binance-api-library')
+    }
+}
+
+project('quant-trading-service') {
+    dependencies {
+        implementation project(':app:common-library')
+        implementation project(':app:common-cache-library')
+        implementation project(':app:binance-api-library')
+        implementation project(':app:quant-db-mapping')
     }
 }

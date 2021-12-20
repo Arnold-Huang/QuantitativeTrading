@@ -1,5 +1,6 @@
-include 'app:common-library',
+include 'quant-db-migration',
+        'app:common-library',
         'app:binance-api-library',
         'app:common-cache-library',
-        'app:quantitative-trading-service',
-        'app:quantitative-db-migration'
+        'app:quant-db-mapping',
+        'app:quant-trading-service'

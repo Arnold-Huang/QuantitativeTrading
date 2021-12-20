@@ -4,7 +4,7 @@ def springBootVersion = "2.6.1"
 def mysqlVersion = '8.0.27'
 
 subprojects {
-    group = "com.quantitative"
+    group = "com.quant"
     version = '1.0.0'
 
     repositories {
@@ -53,9 +53,8 @@ configure(subprojects.findAll { it.name.endsWith('-library') }) {
 
 configure(subprojects.findAll { it.name.endsWith('cache-library') }) {
     dependencies {
+        implementation "org.springframework.boot:spring-boot-starter-cache:${springBootVersion}"
         implementation "org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}"
-        implementation 'javax.cache:cache-api:1.1.1'
-        implementation 'redis.clients:jedis:3.7.0'
     }
 }
 
@@ -63,9 +62,12 @@ configure(subprojects.findAll { it.name.endsWith('-service') }) {
     apply from: file("${rootDir}/gradle/app.gradle")
     dependencies {
         implementation "org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}"
-        implementation "org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}"
         implementation "mysql:mysql-connector-java:${mysqlVersion}"
         implementation "com.alibaba:druid-spring-boot-starter:1.1.10"
         implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.1"
+        implementation 'com.alibaba:fastjson:1.2.78'
+
+        testImplementation 'junit:junit:4.13.2'
+        testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
     }
 }
